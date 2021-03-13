@@ -12,5 +12,5 @@ export default Sidebar
 
 const Working = styled.div`
 background:green;
-height:100vh;
+height:95.9vh;
 `;

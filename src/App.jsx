@@ -39,11 +39,11 @@ width:100%;
 height:100vh;
 background:red;
 display:grid;
-grid-template-rows: 40px;
+grid-template-rows: 40px auto;
 `;
 
 const Main = styled.div`
   background:orange;
   display:grid;
-  grid-template-columns:300px auto;
+  grid-template-columns: 300px auto;
 `;
