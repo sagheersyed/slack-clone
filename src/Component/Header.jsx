@@ -34,10 +34,11 @@ const Container = style.div`
 display:flex;
 justify-content:center;
 align-items:center;
-height: 40px;
+height: 50px;
 background:#350d36;
 color:white;
 position:relative;
+box-shadow: 0px 1px 0px 0px rgba(255, 255, 255 ,10%);
 `;
 
 const Main = style.div`
@@ -58,7 +59,11 @@ const Search = style.div`
         border:none;
         width:95.5%;
         color:white;
-        padding:5px 10px 5px 10px;
+        padding:10px 10px 10px 10px;
+    }
+
+    input:focus{
+        outline:none;
     }
 `;
 
@@ -68,7 +73,7 @@ display:flex;
 align-items:center;
 padding-right:15px;
 position:absolute;
-right:0;
+right:0
 `;
 
 const UserName = style.div`
