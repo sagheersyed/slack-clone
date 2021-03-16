@@ -59,7 +59,7 @@ const Search = style.div`
         border:none;
         width:95.5%;
         color:white;
-        padding:10px 10px 10px 10px;
+        padding:10px 20px 10px 10px;
     }
 
     input:focus{
