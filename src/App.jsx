@@ -6,21 +6,38 @@ import Login from './Component/Login';
 import styled from 'styled-components';
 import Header from './Component/Header';
 import Sidebar from './Component/Sidebar';
-
+import Chat from './Component/Chat';
+import Database from './firebase';
+import { useState } from 'react';
+import { useEffect } from 'react';
 function App() {
-  return (
+  const [channels , setChannels ] = useState([])
+    const getConnectFirebase = ()=>{
+      Database.collection("channels").onSnapshot((snapshot)=>{
+        setChannels(snapshot.docs.map((doc)=>{
+          return {id: doc.id , name:doc.data().name}
+        }))
+      })
+    }
+    useEffect(()=>{
+      getConnectFirebase()
+    },[])
+   return (
     <div className="App">
       <Router>
         <Container>
           <Header/>
           <Main>
-            <Sidebar/>
+            <Sidebar channel={channels}/>
             <Switch> 
               <Route path="/home">
                 <Home/>
               </Route>
               <Route path="/about">
                 <About/>
+              </Route>
+              <Route path="/chat">
+                <Chat/>
               </Route>
               <Route path="/">
                 <Login/>
@@ -39,11 +56,11 @@ width:100%;
 height:100vh;
 background:red;
 display:grid;
-grid-template-rows: 40px auto;
+grid-template-rows: 50px auto;
 `;
 
 const Main = styled.div`
-  background:orange;
+  background:#803e80;
   display:grid;
   grid-template-columns: 300px auto;
 `;

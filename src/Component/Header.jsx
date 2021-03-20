@@ -1,9 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import style from 'styled-components'
 import AccessTime from '@material-ui/icons/AccessTime';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Avatar from '@material-ui/core/Avatar';
+import Database from '../firebase'
 function Header() {
+
+    const [header , setHeader] = useState([])
+    const getConnectFirebase = () =>{
+        Database.collection('home').onSnapshot((snapshot)=>{
+            setHeader(snapshot.docs.map((doc)=>{
+               return {id:doc.id , name: doc.data().name}
+            }))
+        })
+    }
+
+    useEffect(()=>{
+        getConnectFirebase()
+    },[])
+
+    console.log("this is a header" + header)
+
     return (
         <div>
             <Container>
@@ -17,7 +34,11 @@ function Header() {
                 <HelpOutlineIcon style={{marginLeft:20}}/>
             </Main>
             <UserController>
-                <UserName>Sagheer</UserName>
+                <UserName>{
+                    header.map(items=>{
+                        return items.name
+                    })
+                    }</UserName>
                 <UserImage>
                     {/* <img src={"./public/user.jpeg"} alt="xx"/> */}
                     <Avatar style={{width:30 , height:30}}/>
@@ -25,6 +46,7 @@ function Header() {
             </UserController>
             </Container>
         </div>
+        
     )
 }
 
@@ -61,7 +83,6 @@ const Search = style.div`
         color:white;
         padding:10px 20px 10px 10px;
     }
-
     input:focus{
         outline:none;
     }
@@ -73,7 +94,11 @@ display:flex;
 align-items:center;
 padding-right:15px;
 position:absolute;
-right:0
+right:0;
+cursor:pointer;
+:hover{
+    color:orange;
+}
 `;
 
 const UserName = style.div`

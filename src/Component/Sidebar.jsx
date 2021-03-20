@@ -1,17 +1,23 @@
-import React, { useState } from 'react'
 import styled from 'styled-components'
 import ControlPointDuplicateSharpIcon from '@material-ui/icons/ControlPointDuplicateSharp';
+import ImportExportIcon from '@material-ui/icons/ImportExport';
 import AddIcon from '@material-ui/icons/Add';
 import { sidebarDataItems } from './data/sidebarMainChannels';
-import { sidebarChannelsData } from './data/sidebarChannels';
-function Sidebar() {
-    const [states , setState] = useState("SAGHEER SYED");
-    
-    return (
+import {useState , useEffect} from 'react'
+import Database from "../firebase"
+function Sidebar(properties) {
+    console.log("side bar properties : " , properties)
+    const addChannel = ()=>{
+        const promptName = prompt("enter channel name")
+        Database.collection("channels").add({
+            name:promptName
+        })
+    }
+       return (
             <Container>
                 <WorkspaceComponent>
                     <Name>
-                        <a href="#">{states}</a>
+                       <a href="/chat"> Sagheer Syed </a>
                     </Name>
                      <ControlPointDuplicateSharpIcon/>
                 </WorkspaceComponent>
@@ -21,29 +27,30 @@ function Sidebar() {
                         <MainChannelItem>
                             { items.icon }
                                 <Naming>
-                            <a href="#">{ items.text }</a>  
+                            <a href={`${items.href}`}>{ items.text }</a>  
                                 </Naming>
                         </MainChannelItem>
                ))
                 }
+
                 </MainChannel>
                 <Box3>
                     <a href="#">Channels</a>
-                    <AddIcon/>
+                    <AddIcon onClick={addChannel}/>
                 </Box3>
                 <MoreChannels>
                     {
-                        sidebarChannelsData.map(items =>(
-                            <ChannelList>
-                                {
-                                    items.icon
-                                }
-                                <NamingChannel>
-                                    <a href="#">{items.text}</a>
-                                </NamingChannel>
-                                </ChannelList>
-                        ))
+                        properties.channel.map((items)=>{
+                            return (
+                                <ChannelList>
+                                    <ImportExportIcon/>
+                                    <NamingChannel>
+                                         {items.name}
+                                    </NamingChannel>
+                                </ChannelList>)
+                        })
                     }
+
                 </MoreChannels>
             </Container> 
     )
@@ -143,4 +150,8 @@ margin-top:25px;
 `;
 const NamingChannel = styled.div `
 padding-left:5px;
+color:violet;
+:hover{
+    color:whitesmoke;
+}
 `;
