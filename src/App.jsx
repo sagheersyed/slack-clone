@@ -7,44 +7,69 @@ import styled from 'styled-components';
 import Header from './Component/Header';
 import Sidebar from './Component/Sidebar';
 import Chat from './Component/Chat';
-import Database from './firebase';
+import Database, { Auth } from './firebase';
 import { useState } from 'react';
 import { useEffect } from 'react';
 function App() {
-  const [channels , setChannels ] = useState([])
+  const [channels , setChannels ] = useState([])//is mein hm channel create karen ga or yeah sb firebase mein data save ho ga.
+  const [userDetail , setUserDetail] = useState([])
     const getConnectFirebase = ()=>{
       Database.collection("channels").onSnapshot((snapshot)=>{
         setChannels(snapshot.docs.map((doc)=>{
-          return {id: doc.id , name:doc.data().name}
+          return {id: doc.id , name: doc.data().name , href: doc.data().href}
         }))
       })
     }
+
+    const [user , setUser] = useState(JSON.parse(localStorage.getItem('user')))///yeah state hm na user ka liye bnai hai jis mein user ki detail hon gi ka is user ka data hamari app mein mojood hai ka nhi
+    
+    const getConnectFirebaseHeader = ()=>{
+        Database.collection("header").onSnapshot((snapshot)=>{
+          setUserDetail(snapshot.docs.map((doc)=>{
+            return {id:doc.id , name:doc.data().user}
+          }))
+        })
+    }
+
+    const signOut = ()=>{
+      Auth.signOut().then(()=>{
+        localStorage.removeItem('user')
+        setUser(null)
+      })
+    }
+
     useEffect(()=>{
       getConnectFirebase()
+      getConnectFirebaseHeader()
     },[])
+    console.log(userDetail)
    return (
     <div className="App">
       <Router>
+        {
+          // we use !userDetail because we the funtionality if this is the correct user 
+          // then he will access the application other wise he can't do anything.
+            !user?
+            <Login setUser = {setUser}/>
+            : //agr yeah user ki detail sahi ho gi tho hi woh aage pass ho paye ga.
         <Container>
-          <Header/>
+          <Header header = {userDetail}  user = {user} signOut = {signOut}/>
           <Main>
             <Sidebar channel={channels}/>
-            <Switch> 
+            <Switch>
+            <Route path="/">
+                <Chat user = {user}/>
+              </Route> 
               <Route path="/home">
                 <Home/>
               </Route>
               <Route path="/about">
                 <About/>
               </Route>
-              <Route path="/chat">
-                <Chat/>
-              </Route>
-              <Route path="/">
-                <Login/>
-              </Route>
             </Switch>
           </Main>
         </Container>
+        }
       </Router>
     </div>
   );

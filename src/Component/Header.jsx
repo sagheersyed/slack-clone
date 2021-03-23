@@ -4,23 +4,8 @@ import AccessTime from '@material-ui/icons/AccessTime';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Avatar from '@material-ui/core/Avatar';
 import Database from '../firebase'
-function Header() {
-
-    const [header , setHeader] = useState([])
-    const getConnectFirebase = () =>{
-        Database.collection('home').onSnapshot((snapshot)=>{
-            setHeader(snapshot.docs.map((doc)=>{
-               return {id:doc.id , name: doc.data().name}
-            }))
-        })
-    }
-
-    useEffect(()=>{
-        getConnectFirebase()
-    },[])
-
-    console.log("this is a header" + header)
-
+function Header({user , signOut}) {//no need to use props just use the actual property
+    // console.log(props)
     return (
         <div>
             <Container>
@@ -34,22 +19,20 @@ function Header() {
                 <HelpOutlineIcon style={{marginLeft:20}}/>
             </Main>
             <UserController>
-                <UserName>{
-                    header.map(items=>{
-                        return items.name
-                    })
-                    }</UserName>
-                <UserImage>
-                    {/* <img src={"./public/user.jpeg"} alt="xx"/> */}
-                    <Avatar style={{width:30 , height:30}}/>
+                <UserName>
+                    { user.name}
+                    </UserName>
+                <UserImage onClick={signOut}>
+                    <img src={user.photo ? user.photo : "https://www.shareicon.net/data/512x512/2017/01/06/868320_people_512x512.png"} style={{width:40 , height:40 , borderRadius:4}} alt="xx"/>
+                    {/* <Avatar style={{width:30 , height:30}}/> */}
                 </UserImage>
             </UserController>
             </Container>
         </div>
         
+
     )
 }
-
 export default Header
 
 const Container = style.div`
@@ -106,4 +89,5 @@ padding-right:15px;
 `;
 
 const UserImage = style.div`
+border-radius:5px;
 `;

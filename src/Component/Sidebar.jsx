@@ -45,7 +45,7 @@ function Sidebar(properties) {
                                 <ChannelList>
                                     <ImportExportIcon/>
                                     <NamingChannel>
-                                         {items.name}
+                                         <a href={`${items.href}`}>{items.name}</a>
                                     </NamingChannel>
                                 </ChannelList>)
                         })
@@ -60,7 +60,7 @@ export default Sidebar
 
 const Container = styled.div`
 background:#4f1e4e;
-height:95.9vh;
+height:100vh;
 padding-left:35px;
 color:#d9c1d9;
 a{
@@ -92,6 +92,7 @@ font-size: large;
 color:#d9c1d9;
 display:flex;
 align-items:center;
+
 `;
 
 const MainChannel = styled.div `

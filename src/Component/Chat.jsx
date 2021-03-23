@@ -5,13 +5,14 @@ import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import Database from '../firebase'
 import { useEffect } from 'react';
 import { useState } from 'react';
-function Chat() {
+import ChatForm from './data/ChatForm'; 
+function Chat({user}) {
     const [msg , setMsg] = useState([])
     const getChannelFirebase = () =>{
         Database.collection('chat').onSnapshot((snapshot)=>
         {
             setMsg(snapshot.docs.map((doc)=>{
-                return {id:doc.id , name:doc.data().msg}
+                return {id:doc.id , msg:doc.data().msg , time:doc.data().time}
             }))
         })
     }
@@ -19,40 +20,48 @@ function Chat() {
     const newMessage = ()=>{
         const promptName = prompt("enter the msg");
         Database.collection("chat").add({
-            name:promptName            
+            msg:promptName
         })
-        console.log(promptName)
     }
     useEffect(()=>{
         getChannelFirebase();
     },[])
 console.log(msg)
-    return (
+        return (
         <Container>
                 <Header>
-                <UserMain>
-                        <User>
+                <Channel>
+                        <ChannelName>
                             #
                             <Name>Sagheer</Name>
                             <StarOutlineIcon style={{width:20}}/>
-                        </User>
+                        </ChannelName>
                         <Detail>
                             <DetailOption>Details</DetailOption>
                             <ErrorOutlineIcon/>
                         </Detail>
-                    </UserMain>
-                    <Description>
+                </Channel>
+                    <ChannelInfo>
                         My name is Sagheer Syed...
-                    </Description>
+                    </ChannelInfo>
                 </Header>
+                <ChatArea onClick={newMessage}>
                 {
                     msg.map(items=>{
-                       return (<Messages>{items.name}</Messages>)
+                       return (
+                        <Parent>
+                            <UserAvator><img src={user.photo} alt=""/></UserAvator>
+                            <Messages>{items.msg}</Messages>
+                        </Parent>
+                       )
                     })
                 }
+                </ChatArea>
                 <MessageInput>
                    <span></span>
-                   <Message> <input type="text" onClick={newMessage}  placeholder="Message #Sagheer"/></Message>
+                   <Message> 
+                       <ChatForm chrat={Message}/>
+                   </Message>
                 </MessageInput>
         </Container>
     )
@@ -61,17 +70,18 @@ console.log(msg)
 export default Chat;
 
 const Container = styled.div `
-height:95.9vh;
+height:100vh;
 margin-right:10px;
 border-right:1px solid black;
 color:black;
 position:relative;
 background:whitesmoke;
+display:grid;
+grid-template-rows: 80px auto min-content;
 `;
 
 const Header = styled.div `
 background:transparent;
-height:70px;
 padding-bottom:12px;
 box-shadow: 0px 1px 0px 0px rgba(200, 200, 200 ,50%);
 :hover{
@@ -80,7 +90,7 @@ box-shadow: 0px 1px 0px 0px rgba(200, 200, 200 ,50%);
 
 `
 
-const UserMain = styled.div `
+const Channel= styled.div `
 padding-top:15px;
 display:flex;
 align-items:center;
@@ -88,7 +98,7 @@ justify-content:space-between;
 color:black;
 `;
 
-const User = styled.div `
+const ChannelName = styled.div `
 display:flex;
 align-items:center;
 padding-left:20px;
@@ -115,15 +125,16 @@ padding-right:10px;
 }
 `
 
-const Description = styled.div `
+const ChannelInfo = styled.div `
 padding-left:20px;
 color:#878a88;
 `;
 
 const MessageInput = styled.div `
-position:absolute;
-bottom:30px;
-left:3%;
+display:flex;
+justify-content:center;
+align-items:center;
+padding-bottom:10px;
 `;
 
 const Message = styled.div `
@@ -132,7 +143,7 @@ input{
     border:1px solid #757d77;
     color:black;
     font:50px;
-    border-radius:10px;
+    border-radius:5px;
     width:77vw;
     padding:13px;
     outline:none;
@@ -143,10 +154,32 @@ const Messages = styled.div `
 color:black;
 padding-left:40px;
 margin:10px;
-background:#719bde;
-width:300px;
-height:4vh;
-border-radius:20px;
+background:#c1d0e8;
+width:20vw;
+height:5vh;
+border-radius:5px;
 display:flex;
 align-items:center;
+`;
+
+const ChatArea = styled.div`
+`;
+
+const Parent = styled.div`
+width:20vw;
+display:flex;
+align-items:center;
+padding:20px;
+`;
+
+const UserAvator =styled.div`
+img{
+    height:50px;
+    display:flex;
+    border-radius:50%;
+}
+`;
+
+const Block = styled.div`
+background:#719bde;
 `;

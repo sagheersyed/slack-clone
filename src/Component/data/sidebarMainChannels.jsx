@@ -10,26 +10,32 @@ import TurnedInIcon from '@material-ui/icons/TurnedIn';
 export const sidebarDataItems = [
     {
         icon:<ControlPointDuplicateSharpIcon/>,
-        text : "Thread"
+        text : "Thread",
+        href : "/home"
     },
     {
         icon:<CommentIcon/>,
-        text : "All Dms"
+        text : "All Dms",
+        href : "/about"
     },
     {
         icon:<AddIcon/>,
-        text : "Mentions & Reactions"
+        text : "Mentions & Reactions",
+        href : "/home"
     },
     {
         icon:<MoreIcon/>,
-        text : "Save Items"
+        text : "Save Items",
+        href : "/login"
     },
     {
         icon:<GroupIcon/>,
-        text : "Peoples & Groups"
+        text : "Peoples & Groups",
+        href : "#"
     },
     {
         icon:<TurnedInIcon/>,
-        text : "More"
+        text : "More",
+        href : "#"
     }
 ]
